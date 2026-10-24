@@ -220,12 +220,15 @@ async function getAIResponse(userText, img, mime) {
   };
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const res = await fetch(url, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-goog-api-key': GEMINI_API_KEY
+  },
+  body: JSON.stringify(body)
+});
     if (!res.ok) {
       let m = `HTTP ${res.status}`;
       try { m = (await res.json()).error?.message || m; } catch (_) {}
