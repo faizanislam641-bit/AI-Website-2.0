@@ -1,7 +1,10 @@
 /* ==========================================================
-   🔑 Gemini API key এখানে বসাও
+   🤖 FAIZAN AI — script.js
+   ----------------------------------------------------------
+   API Key: Cloudflare Worker-এর Secret-এ রাখা
+   Worker URL: https://ai-website-2-0.faizanislam898.workers.dev
    ========================================================== */
-const GEMINI_API_KEY = 'AQ.Ab8RN6KMYRvjzrkqQ7P33D54nzUOgN8eeEg0slubylAENwkZAw';
+const WORKER_URL = 'https://ai-website-2-0.faizanislam898.workers.dev';
 const GEMINI_MODEL = 'gemini-2.5-flash';
 
 /* ================= 4D BACKGROUND ================= */
@@ -203,14 +206,11 @@ function addTyping() {
 function removeTyping() { document.getElementById('typing-msg')?.remove(); }
 
 /* ==========================================================
-   🤖 AI RESPONSE ENGINE — FIXED for AQ. format keys
+   🤖 AI RESPONSE ENGINE via Cloudflare Worker Proxy
    ----------------------------------------------------------
-   Changed: uses `x-goog-api-key` header instead of ?key=
+   Key লুকানো Cloudflare Secret-এ। ফ্রন্টএন্ড শুধু Worker-এ কল।
    ========================================================== */
 async function getAIResponse(userText, img, mime) {
-  if (!GEMINI_API_KEY || GEMINI_API_KEY.includes('YOUR_GEMINI')) {
-    return `⚠️ **API Key Missing**\n\nSet your Gemini API key at the top of \`script.js\`.\n\nGet one free: https://aistudio.google.com/apikey`;
-  }
   const parts = [];
   if (userText?.trim()) parts.push({ text: userText.trim() });
   if (img && mime) parts.push({ inline_data: { mime_type: mime, data: img.split(',')[1] } });
@@ -219,20 +219,16 @@ async function getAIResponse(userText, img, mime) {
   const sys = `You are FAIZAN AI, an intelligent assistant by Md. Faizan Islam. Solve ANY problem: math, coding, science, translation, writing, general knowledge. If an image is provided, analyze it carefully — read text, solve equations, describe diagrams, explain code. Match the user's language (Bangla or English). Format clearly.`;
 
   const body = {
+    model: GEMINI_MODEL,
     system_instruction: { parts: [{ text: sys }] },
     contents: chatHistory.concat([{ role: 'user', parts }]),
     generationConfig: { temperature: 0.7, maxOutputTokens: 2048 }
   };
 
   try {
-    // ✅ FIXED: no ?key= in URL, key goes in x-goog-api-key header
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-    const res = await fetch(url, {
+    const res = await fetch(WORKER_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': GEMINI_API_KEY
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
 
@@ -240,23 +236,24 @@ async function getAIResponse(userText, img, mime) {
       let m = `HTTP ${res.status}`;
       try { m = (await res.json()).error?.message || m; } catch (_) {}
       if (res.status === 401) {
-        return `❌ **API Key Invalid (401)**\n\nKey: \`${GEMINI_API_KEY.slice(0, 12)}...\`\n\n**Possible reasons:**\n• Key expired or revoked\n• Key not copied fully\n• Wrong API enabled for this key\n\n👉 Get a fresh key: https://aistudio.google.com/apikey\n\nRaw error: ${m}`;
+        return `❌ **Worker Error 401**\n\nCloudflare Worker-এ \`GEMINI_API_KEY\` Secret ঠিক নেই।\n\nWorker → Settings → Variables and Secrets চেক করো।\n\nRaw: ${m}`;
       }
-      if (res.status === 429) return `⏳ Rate limit reached. Wait a moment and try again.`;
-      if (res.status === 404) return `⚠️ Model unavailable (\`${GEMINI_MODEL}\`). Try changing GEMINI_MODEL to \`gemini-2.5-flash\`.`;
+      if (res.status === 429) return `⏳ Rate limit reached. একটু অপেক্ষা করে আবার চেষ্টা করো।`;
+      if (res.status === 404) return `⚠️ Model unavailable (\`${GEMINI_MODEL}\`)।`;
       if (res.status === 400) return `⚠️ Bad request: ${m}`;
       return `⚠️ **Error ${res.status}**\n\n${m}`;
     }
 
     const data = await res.json();
     const reply = data.candidates?.[0]?.content?.parts?.map(p => p.text).filter(Boolean).join('\n') || '';
-    if (!reply) return `🤔 Empty response. Try again.`;
+    if (!reply) return `🤔 Empty response. আবার চেষ্টা করো।`;
+
     chatHistory.push({ role: 'user', parts: [{ text: userText || '[image]' }] });
     chatHistory.push({ role: 'model', parts: [{ text: reply }] });
     if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
     return reply;
   } catch (err) {
-    return `❌ **Connection Error**\n\n${err.message}\n\nCheck your internet connection.`;
+    return `❌ **Connection Error**\n\n${err.message}\n\nWorker URL: ${WORKER_URL}`;
   }
 }
 
