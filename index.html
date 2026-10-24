@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAIZAN AI — Intelligent Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== LAYERED BACKGROUND ===== -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="aurora aurora-1"></div>
+  <div class="aurora aurora-2"></div>
+  <div class="aurora aurora-3"></div>
+  <div class="grid-overlay"></div>
+  <div class="noise-overlay"></div>
+  <div class="border-frame"></div>
+
+  <!-- ===== APP ===== -->
+  <div class="app-shell">
+
+    <!-- HEADER -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">
+          <span>◈</span>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">FAIZAN<span class="brand-ai">AI</span></span>
+          <span class="brand-tag">Neural Intelligence Engine</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span>Online</span>
+        </div>
+        <button id="theme-toggle" class="theme-btn" title="Toggle theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-pill">
+        <span class="pill-dot"></span>
+        <span>Powered by Gemini FAIZAN</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="title-line">Developed by</span>
+        <span class="title-name glitch" data-text="FAIZAN">FAIZAN</span>
+      </h1>
+      <p class="hero-subtitle">Ask anything. Upload images. Solve everything.</p>
+    </section>
+
+    <!-- CHAT CARD -->
+    <section class="chat-card">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
+
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <div class="ai-orb">
+            <div class="orb-core"></div>
+            <div class="orb-ring"></div>
+          </div>
+          <div>
+            <div class="chat-header-title">FAIZAN AI</div>
+            <div class="chat-header-sub">Ready to solve your problems</div>
+          </div>
+        </div>
+        <div class="chat-header-right">
+          <span class="badge">● Live</span>
+        </div>
+      </div>
+
+      <div id="chat-box" class="chat-box">
+        <div class="welcome-msg">
+          <div class="ai-avatar">◈</div>
+          <div class="msg-content">
+            <p>Hello! I'm <strong>FAIZAN AI</strong>. Upload any image or ask me anything — math, code, translation, diagrams, or general questions. Ready when you are. 🚀</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="composer">
+        <div id="preview-container" class="preview-container"></div>
+
+        <label for="image-upload" class="icon-action" title="Upload image">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <input type="file" id="image-upload" accept="image/*" hidden />
+        </label>
+
+        <textarea id="user-input" placeholder="Type your problem… or upload an image" rows="1"></textarea>
+
+        <button id="send-btn" class="send-btn">
+          <span>Send</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT SECTION (always visible) ===== -->
+    <section class="contact-section">
+      <div class="contact-head">
+        <span class="contact-line"></span>
+        <h2 class="contact-title">Connect with FAIZAN</h2>
+        <span class="contact-line"></span>
+      </div>
+      <p class="contact-sub">Let's build something amazing together</p>
+
+      <div class="contact-grid">
+        <a href="https://www.facebook.com/Faizanislam.999" target="_blank" class="contact-card" style="--c:#1877f2">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+              <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-label">Facebook</span>
+            <span class="contact-value">@Faizanislam.999</span>
+          </div>
+          <div class="contact-arrow">→</div>
+        </a>
+
+        <a href="https://www.linkedin.com/in/md-faizan-islam-729280395" target="_blank" class="contact-card" style="--c:#0a66c2">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+              <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-label">LinkedIn</span>
+            <span class="contact-value">Md. Faizan Islam</span>
+          </div>
+          <div class="contact-arrow">→</div>
+        </a>
+
+        <a href="https://wa.me/8801646313289" target="_blank" class="contact-card" style="--c:#25d366">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+              <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.79h-.01a9.87 9.87 0 01-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 012.9 6.99c0 5.45-4.44 9.88-9.9 9.88zM20.52 3.45A11.83 11.83 0 0012.05.01C5.46.01.1 5.37.09 11.96c0 2.11.55 4.17 1.6 5.98L0 24l6.21-1.63a11.85 11.85 0 005.83 1.49h.01c6.58 0 11.95-5.36 11.95-11.95 0-3.19-1.24-6.19-3.48-8.46z"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-label">WhatsApp</span>
+            <span class="contact-value">+880 1646-313289</span>
+          </div>
+          <div class="contact-arrow">→</div>
+        </a>
+
+        <a href="https://faizanislam641-bit.github.io/" target="_blank" class="contact-card" style="--c:#00e5ff">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-label">Portfolio</span>
+            <span class="contact-value">faizanislam641-bit</span>
+          </div>
+          <div class="contact-arrow">→</div>
+        </a>
+
+        <a href="https://github.com/faizanislam641-bit" target="_blank" class="contact-card" style="--c:#a78bfa">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+              <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.55v-1.94c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.05 11.05 0 015.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.4-5.26 5.69.41.35.78 1.05.78 2.12v3.15c0 .3.21.66.8.55A11.51 11.51 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <span class="contact-label">GitHub</span>
+            <span class="contact-value">faizanislam641-bit</span>
+          </div>
+          <div class="contact-arrow">→</div>
+        </a>
+      </div>
+
+      <div class="footer-credit">
+        <span>Built with</span>
+        <span class="heart">💙</span>
+        <span>by <strong>Md. Faizan Islam</strong> · © 2026</span>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
