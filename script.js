@@ -2,7 +2,7 @@
    🔑 Gemini API key এখানে বসাও
    ========================================================== */
 const GEMINI_API_KEY = 'AQ.Ab8RN6KMYRvjzrkqQ7P33D54nzUOgN8eeEg0slubylAENwkZAw';
-const GEMINI_MODEL = 'gemini-3.5-flash';
+const GEMINI_MODEL = 'gemini-2.5-flash';
 
 /* ================= 4D BACKGROUND ================= */
 const canvas = document.getElementById('bg-canvas');
@@ -202,6 +202,11 @@ function addTyping() {
 }
 function removeTyping() { document.getElementById('typing-msg')?.remove(); }
 
+/* ==========================================================
+   🤖 AI RESPONSE ENGINE — FIXED for AQ. format keys
+   ----------------------------------------------------------
+   Changed: uses `x-goog-api-key` header instead of ?key=
+   ========================================================== */
 async function getAIResponse(userText, img, mime) {
   if (!GEMINI_API_KEY || GEMINI_API_KEY.includes('YOUR_GEMINI')) {
     return `⚠️ **API Key Missing**\n\nSet your Gemini API key at the top of \`script.js\`.\n\nGet one free: https://aistudio.google.com/apikey`;
@@ -220,22 +225,29 @@ async function getAIResponse(userText, img, mime) {
   };
 
   try {
+    // ✅ FIXED: no ?key= in URL, key goes in x-goog-api-key header
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-const res = await fetch(url, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'x-goog-api-key': GEMINI_API_KEY
-  },
-  body: JSON.stringify(body)
-});
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': GEMINI_API_KEY
+      },
+      body: JSON.stringify(body)
+    });
+
     if (!res.ok) {
       let m = `HTTP ${res.status}`;
       try { m = (await res.json()).error?.message || m; } catch (_) {}
-      if (res.status === 429) return `⏳ Rate limit reached. Wait a moment.`;
-      if (res.status === 404) return `⚠️ Model unavailable. Check GEMINI_MODEL.`;
+      if (res.status === 401) {
+        return `❌ **API Key Invalid (401)**\n\nKey: \`${GEMINI_API_KEY.slice(0, 12)}...\`\n\n**Possible reasons:**\n• Key expired or revoked\n• Key not copied fully\n• Wrong API enabled for this key\n\n👉 Get a fresh key: https://aistudio.google.com/apikey\n\nRaw error: ${m}`;
+      }
+      if (res.status === 429) return `⏳ Rate limit reached. Wait a moment and try again.`;
+      if (res.status === 404) return `⚠️ Model unavailable (\`${GEMINI_MODEL}\`). Try changing GEMINI_MODEL to \`gemini-2.5-flash\`.`;
+      if (res.status === 400) return `⚠️ Bad request: ${m}`;
       return `⚠️ **Error ${res.status}**\n\n${m}`;
     }
+
     const data = await res.json();
     const reply = data.candidates?.[0]?.content?.parts?.map(p => p.text).filter(Boolean).join('\n') || '';
     if (!reply) return `🤔 Empty response. Try again.`;
@@ -244,7 +256,7 @@ const res = await fetch(url, {
     if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
     return reply;
   } catch (err) {
-    return `❌ **Connection Error**\n\n${err.message}`;
+    return `❌ **Connection Error**\n\n${err.message}\n\nCheck your internet connection.`;
   }
 }
 
